@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/bernardo-bruning/ollama-copilot/internal/handlers"
+	"github.com/tectiv3/ollama-copilot/internal/handlers"
 )
 
 func TestTokenHandler_ServeHTTP(t *testing.T) {

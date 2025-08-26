@@ -12,9 +12,9 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/bernardo-bruning/ollama-copilot/internal/handlers"
-	"github.com/bernardo-bruning/ollama-copilot/internal/middleware"
 	"github.com/ollama/ollama/api"
+	"github.com/tectiv3/ollama-copilot/internal/handlers"
+	"github.com/tectiv3/ollama-copilot/internal/middleware"
 )
 
 // Server is the main server struct.
@@ -91,7 +91,6 @@ func selfAssignCertificate() (tls.Certificate, error) {
 // mux returns the main mux for the server.
 func (s *Server) mux() http.Handler {
 	api, err := api.ClientFromEnvironment()
-
 	if err != nil {
 		log.Fatalf("error initialize api: %s", err.Error())
 		return nil
@@ -109,7 +108,8 @@ func (s *Server) mux() http.Handler {
 	mux.Handle("/copilot_internal/v2/token", handlers.NewTokenHandler())
 	mux.Handle("/v1/engines/copilot-codex/completions", handlers.NewCompletionHandler(api, s.Model, templ, s.NumPredict))
 	mux.Handle("/v1/engines/chat-control/completions", handlers.NewCompletionHandler(api, s.Model, templ, s.NumPredict))
-  mux.Handle("/v1/engines/gpt-4o-copilot/completions", handlers.NewCompletionHandler(api, s.Model, templ, s.NumPredict))
+	mux.Handle("/v1/engines/gpt-4o-copilot/completions", handlers.NewCompletionHandler(api, s.Model, templ, s.NumPredict))
+	mux.Handle("/v1/engines/gpt-41-copilot/completions", handlers.NewCompletionHandler(api, s.Model, templ, s.NumPredict))
 
 	return middleware.LogMiddleware(middleware.GithubHeaderMiddleware(mux))
 }

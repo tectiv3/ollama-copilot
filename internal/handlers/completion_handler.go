@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 	"text/template"
 	"time"
 
@@ -62,7 +63,7 @@ type Prompt struct {
 }
 
 func (p Prompt) Generate(templ *template.Template) string {
-	var buf = new(bytes.Buffer)
+	buf := new(bytes.Buffer)
 	err := templ.Execute(buf, p)
 	if err != nil {
 		log.Printf("error executing prompt template: %s", err.Error())
@@ -122,7 +123,7 @@ func (c *CompletionHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			Created: time.Now().Unix(),
 			Choices: []ChoiceResponse{
 				{
-					Text:  resp.Response,
+					Text:  processResponse(resp.Response),
 					Index: 0,
 				},
 			},
@@ -159,4 +160,13 @@ func (c *CompletionHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Printf("error generating completion: %v", err)
 		return
 	}
+}
+
+func processResponse(response string) string {
+	r := strings.NewReplacer(`
+<EOT>`, "",
+		"<EOT>", "")
+	// log.Println("Processed response:", r.Replace(response))
+
+	return r.Replace(response)
 }

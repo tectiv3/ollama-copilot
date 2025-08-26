@@ -27,7 +27,7 @@ ollama pull codellama:code
 ### ollama-copilot
 
 ```bash
-go install github.com/bernardo-bruning/ollama-copilot@latest
+go install github.com/tectiv3/ollama-copilot@latest
 ```
 
 ### Running
